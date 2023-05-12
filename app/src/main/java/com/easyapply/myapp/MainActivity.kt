@@ -8,12 +8,19 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.easyapply.myapp.presentation.FavouritesScreen
 import com.easyapply.myapp.presentation.Screen
-import com.easyapply.myapp.presentation.favourite_list.PostListScreen
+import com.easyapply.myapp.presentation.favourite_list.FavouritePostListScreen
+import com.easyapply.myapp.presentation.post_detail.components.PostDetailScreen
+import com.easyapply.myapp.presentation.post_list.PostListScreen
 import com.easyapply.myapp.presentation.ui.theme.MyAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,7 +33,6 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 val navController = rememberNavController()
                 BottomNavigation(navController = navController)
-
             }
         }
     }
@@ -44,10 +50,22 @@ fun BottomNavigation(navController: NavHostController) {
     Scaffold(
         bottomBar = {
             BottomNavigation() {
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentDestination = navBackStackEntry?.destination
                 items.forEachIndexed { index, item ->
+                    val isSelected = selectedIndex == index
                     BottomNavigationItem(
-                        selected = selectedIndex == index,
-                        onClick = { selectedIndex = index },
+                        selected = isSelected && currentDestination?.hierarchy?.any { it.route == item.route } == true,
+                        onClick = {
+                            selectedIndex = index
+                            navController.navigate(item.route) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        },
                         icon = { Icon(item.icon, contentDescription = item.label) },
                         label = { Text(item.label) }
                     )
@@ -55,10 +73,26 @@ fun BottomNavigation(navController: NavHostController) {
             }
         }
     ) { innerPadding ->
-        // Switch content based on selected index
-        when (selectedIndex) {
-            0 -> PostListScreen(navController)
-            1 -> FavouritesScreen(navController)
+        NavHost(
+            modifier = Modifier,
+            navController = navController,
+            startDestination = Screen.PostListScreen.route
+        ) {
+            composable(Screen.PostDetailScreen.route) {
+                PostDetailScreen()
+            }
+            composable(Screen.PostListScreen.route) {
+                PostListScreen(
+                    navController = navController
+                ) { id: String ->
+                    navController.navigate(
+                        "post_detail_screen/$id"
+                    )
+                }
+            }
+            composable(Screen.PostFavouritesScreen.route) {
+                FavouritePostListScreen(navController)
+            }
         }
     }
 }

@@ -9,11 +9,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.easyapply.myapp.presentation.Screen
-import com.easyapply.myapp.presentation.favourite_list.component.PostItem
+import com.easyapply.myapp.presentation.post_comment_list.component.PostItem
+import timber.log.Timber
 
 @Composable
-fun PostListScreen(navController: NavController, viewModel: PostListViewModel = hiltViewModel()) {
+fun PostListScreen(
+    navController: NavController,
+    viewModel: PostListViewModel = hiltViewModel(),
+    onNavigateToDetailsScreen: (String) -> Unit
+) {
     val state = viewModel.state.value
     Column {
         if (state.isLoading) {
@@ -22,7 +26,8 @@ fun PostListScreen(navController: NavController, viewModel: PostListViewModel = 
             LazyColumn {
                 items(state.posts) { post ->
                     PostItem(post = post, onClick = {
-                        navController.navigate(Screen.PostDetailScreen.route + "/${post.id}")
+                        Timber.d("CLICKED POST ${post.id}")
+                        onNavigateToDetailsScreen(post.id)
                     })
                 }
             }

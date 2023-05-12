@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.sp
 import com.easyapply.myapp.domain.model.Post
 
 @Composable
-fun PostItem(post: Post, onClick: (Post) -> Unit) {
+fun PostFavouriteItem(post: Post, onClick: (Post) -> Unit) {
     Card(
         modifier = Modifier
             .padding(8.dp)
