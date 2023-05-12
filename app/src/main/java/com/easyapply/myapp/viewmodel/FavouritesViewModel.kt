@@ -1,13 +1,13 @@
 package com.easyapply.myapp.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.easyapply.myapp.repo.PostRepository
+import com.easyapply.myapp.domain.use_case.get_posts.GetPostsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class FavouritesViewModel @Inject constructor(
-    private val postRepository: PostRepository
+    private val favouriteUseCase: GetPostsUseCase
 ) : ViewModel() {
    /* val favourites: LiveData<List<Post>> = postRepository.getFavourites()
 

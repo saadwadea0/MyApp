@@ -1,20 +1,20 @@
 package com.easyapply.myapp.db
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.easyapply.myapp.data.Post
+import com.easyapply.myapp.data.remote.dto.PostDto
+import com.easyapply.myapp.domain.model.Post
 
 
 @Dao
 interface PostDao {
     @Query("SELECT * FROM post")
-    suspend fun getPosts(): List<Post>
+    suspend fun getPosts(): List<PostDto>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertPosts(posts: List<Post>)
+    suspend fun insertPosts(posts: List<PostDto>)
 
    /* @Query("SELECT * FROM post WHERE is_favorite = 1")
     fun getFavourites(): LiveData<List<Post>>

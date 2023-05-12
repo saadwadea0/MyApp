@@ -1,4 +1,4 @@
-package com.easyapply.myapp.ui.theme
+package com.easyapply.myapp.presentation.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle

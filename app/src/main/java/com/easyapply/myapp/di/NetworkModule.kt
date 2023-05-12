@@ -1,7 +1,12 @@
 package com.easyapply.myapp.di
 
+import androidx.room.Dao
+import com.easyapply.myapp.common.Constants
 import com.easyapply.myapp.common.Constants.BASE_URL
-import com.easyapply.myapp.data.ApiService
+import com.easyapply.myapp.data.PostApi
+import com.easyapply.myapp.data.repo.PostRepoImpl
+import com.easyapply.myapp.db.PostDao
+import com.easyapply.myapp.domain.repo.PostRepo
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,7 +18,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
-import kotlin.text.Typography.dagger
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -45,7 +49,13 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideApiService(retrofit: Retrofit): ApiService =
-        retrofit.create(ApiService::class.java)
+    fun provideApiService(retrofit: Retrofit): PostApi =
+        retrofit.create(PostApi::class.java)
 
+
+    @Provides
+    @Singleton
+    fun providePostApiService(api: PostApi,dao: PostDao): PostRepo {
+        return PostRepoImpl(api,dao)
+    }
 }
