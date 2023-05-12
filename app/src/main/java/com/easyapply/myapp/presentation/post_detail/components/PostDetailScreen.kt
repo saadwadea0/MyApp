@@ -29,7 +29,7 @@ fun PostDetailScreen(
         CircularProgressIndicator(modifier = Modifier)
     } else {
         LazyColumn(
-            modifier = Modifier.padding(20.dp)
+            modifier = Modifier.padding(horizontal = 20.dp)
         ) {
             item {
                 Column(
@@ -37,7 +37,8 @@ fun PostDetailScreen(
                 ) {
                     Card(
                         modifier = Modifier
-                            .fillMaxWidth(),
+                            .fillMaxWidth()
+                            .padding(top = 20.dp),
                         elevation = 4.dp
                     ) {
                         Column(

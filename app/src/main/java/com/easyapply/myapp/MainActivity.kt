@@ -3,6 +3,7 @@ package com.easyapply.myapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -74,7 +75,7 @@ fun BottomNavigation(navController: NavHostController) {
         }
     ) { innerPadding ->
         NavHost(
-            modifier = Modifier,
+            modifier = Modifier.padding(innerPadding),
             navController = navController,
             startDestination = Screen.PostListScreen.route
         ) {
